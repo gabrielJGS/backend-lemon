@@ -22,7 +22,7 @@ const classesDeConsumo = [
 
 const modalidadesTarifarias = ['azul', 'branca', 'verde', 'convencional']
 
-module.exports = {
+export{
     cpf,
     cnpj,
     tiposDeConexao,

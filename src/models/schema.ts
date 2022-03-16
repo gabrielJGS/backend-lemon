@@ -1,5 +1,5 @@
 // Schema de input e output que a aplicação deve realizar
-// const { tiposDeConexao, classesDeConsumo, modalidadesTarifarias, cpf, cnpj } = require('./tipos')
+const { tiposDeConexao, classesDeConsumo, modalidadesTarifarias, cpf, cnpj } = require('./tipos')
 
 const enumOf = (values: any) => ({
   type: typeof values[0],
@@ -69,7 +69,7 @@ const output = {
   ],
 }
 
-module.exports = {
+export{
   input,
   output,
 }

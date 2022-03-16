@@ -1,5 +1,9 @@
 # backend-lemon
-https://lemonenergy.notion.site/Teste-Backend-Lemon-9958a9678c0d4ac99185850fdb9716fc
+
+    // DUVIDA: Os valores recebidos no historicoDeConsumo estão em kwh?
+    // DUVIDA: A media anual deve ser calculada pelo valor de 12 meses ou quantidade de valores enviados(10 no segundo caso)?
+
+https://lemonenergy.notion.site/Teste-Backend-Lemon-9958a9678c0d4ac99185850fdb9716fc<br>
 Nem todos os clientes que desejam fazer parte da Lemon podem ser aceitos no momento. Seja por razões regulatórias ou porque não vale a pena para o cliente ou para a Lemon ter essa empresa como cliente. No processo de aquisição de clientes, fazemos a checagem de elegibilidade da mesma, através dos dados contidos na conta de luz do cliente. Caso a empresa não seja elegível, precisamos explicitar os motivos para tal. Caso ela seja elegível, precisamos calcular também a projeção da quantidade de CO2 que ela deixaria de emitir caso usasse energia limpa. 
 
 # Schemas de Entrada e Saída
