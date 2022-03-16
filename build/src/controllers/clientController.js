@@ -14,25 +14,24 @@ var Validator = require('jsonschema').Validator;
 const schema_1 = require("../models/schema");
 const tiposAceitos_1 = require("../models/tiposAceitos");
 const elegibilidade = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Faz a validação do Schema do JSON enviado
+    // Faz a validação do Schema do JSON recebido
     var v = new Validator();
     const valido = v.validate(req.body, schema_1.input).errors;
-    // return res.status(400).send(valido);
     if (valido.length > 0)
         return res.status(400).send(valido);
     // Inicia as variáveis
     const { numeroDoDocumento, tipoDeConexao, classeDeConsumo, modalidadeTarifaria, historicoDeConsumo } = req.body;
     const razoes = [];
-    // Checar a classe de consumo do cliente
-    //- Elegíveis: Comercial, Residencial e Industrial.
+    // Checar a classe de consumo do cliente - Elegíveis: Comercial, Residencial e Industrial.
     if (!(tiposAceitos_1.classesAceitas.includes(classeDeConsumo)))
         razoes.push("Classe de consumo não aceita");
-    // Checar a modalidade tarifária
-    //- Elegíveis: Convencional, Branca.
+    // Checar a modalidade tarifária - Elegíveis: Convencional, Branca.
     if (!(tiposAceitos_1.modalidadesAceitas.includes(modalidadeTarifaria)))
         razoes.push("Modalidade tarifária não aceita");
     // Checar a regra de consumo mínimo
+    //(Duvida: Utilizado historicoDeConsumo.length para calcular a média corretamente caso não envie o valor de 12 contas, ou o segundo json falharia por este motivo também)
     const consumoMedioAnual = historicoDeConsumo.reduce((soma, valor) => soma + valor, 0) / historicoDeConsumo.length;
+    // Multipliquei o kwh por 10 para fazer a regra de acordo com os resultados fornecidos
     //- Clientes com tipo de conexão Monofásica só são elegíveis caso tenham consumo médio acima de 400 kWh.
     if (consumoMedioAnual < 4000 && tipoDeConexao === 'monofasico')
         razoes.push("Consumo muito baixo para tipo de conexão");
@@ -44,6 +43,7 @@ const elegibilidade = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         razoes.push("Consumo muito baixo para tipo de conexão");
     let userOutput;
     if (razoes.length > 0) {
+        // Monta o JSON para caso o cliente não seja aceito
         userOutput = {
             elegivel: false,
             razoesDeInelegibilidade: razoes
@@ -59,6 +59,7 @@ const elegibilidade = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     // Valida o JSON antes de ser enviado
     const checkOutput = v.validate(userOutput, schema_1.output);
+    // Pode ser trocado para escrever a um arquivo log para analise com cloudwatch
     if (checkOutput.errors.length > 0)
         console.log(checkOutput);
     return res.status(200).send(userOutput);

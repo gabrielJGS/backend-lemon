@@ -4,6 +4,7 @@
   "description": "Teste para a vaga backend jr na Lemon Energy",
   "main": "src/index.ts",
   "scripts": {
+    "start": "node build/src/index.js",
     "build": "tsc --project ./",
     "test": "jest",
     "dev": "nodemon"
