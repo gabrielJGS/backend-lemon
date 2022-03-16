@@ -12,15 +12,15 @@ const elegibilidade = async (req: Request, res: Response) => {
     // Inicia as variáveis
     const { numeroDoDocumento, tipoDeConexao, classeDeConsumo, modalidadeTarifaria, historicoDeConsumo } = req.body;
     const razoes: string[] = [];
-    // Checar a classe de consumo do cliente
-    //- Elegíveis: Comercial, Residencial e Industrial.
+    // Checar a classe de consumo do cliente - Elegíveis: Comercial, Residencial e Industrial.
     if (!(classesAceitas.includes(classeDeConsumo))) razoes.push("Classe de consumo não aceita");
-    // Checar a modalidade tarifária
-    //- Elegíveis: Convencional, Branca.
+    // Checar a modalidade tarifária - Elegíveis: Convencional, Branca.
     if (!(modalidadesAceitas.includes(modalidadeTarifaria))) razoes.push("Modalidade tarifária não aceita");
 
     // Checar a regra de consumo mínimo
+    //(Duvida: Utilizado historicoDeConsumo.length para calcular a média corretamente caso não envie o valor de 12 contas, ou o segundo json falharia por este motivo também)
     const consumoMedioAnual = historicoDeConsumo.reduce((soma: number, valor: number) => soma + valor, 0) / historicoDeConsumo.length;
+    // Multipliquei o kwh por 10 para fazer a regra de acordo com os resultados fornecidos
     //- Clientes com tipo de conexão Monofásica só são elegíveis caso tenham consumo médio acima de 400 kWh.
     if (consumoMedioAnual < 4000 && tipoDeConexao === 'monofasico') razoes.push("Consumo muito baixo para tipo de conexão");
     //- Clientes com tipo de conexão Bifásica só são elegíveis caso tenham consumo médio acima de 500 kWh.
@@ -30,6 +30,7 @@ const elegibilidade = async (req: Request, res: Response) => {
 
     let userOutput;
     if (razoes.length > 0) {
+        // Monta o JSON para caso o cliente não seja aceito
         userOutput = {
             elegivel: false,
             razoesDeInelegibilidade: razoes
