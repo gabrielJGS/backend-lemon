@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 var Validator = require('jsonschema').Validator;
 import { input, output } from '../models/schema';
+// import { cpf, cnpj } from '../models/tipos';
 import { classesAceitas, modalidadesAceitas } from '../models/tiposAceitos';
 
 const elegibilidade = async (req: Request, res: Response) => {
@@ -12,6 +13,11 @@ const elegibilidade = async (req: Request, res: Response) => {
     // Inicia as variáveis
     const { numeroDoDocumento, tipoDeConexao, classeDeConsumo, modalidadeTarifaria, historicoDeConsumo } = req.body;
     const razoes: string[] = [];
+
+    // FUNCIONALIDADE EXTRA: Checa o cpf/cnpj do cliente
+    // OBS: Cancelado para não alterar o schema do JSON de output
+    // if (!(new RegExp(cpf.pattern).test(numeroDoDocumento) || new RegExp(cnpj.pattern).test(numeroDoDocumento))) razoes.push("O Número do documento não é um CPF ou CNPJ válido");
+
     // Checar a classe de consumo do cliente - Elegíveis: Comercial, Residencial e Industrial.
     if (!(classesAceitas.includes(classeDeConsumo))) razoes.push("Classe de consumo não aceita");
     // Checar a modalidade tarifária - Elegíveis: Convencional, Branca.
