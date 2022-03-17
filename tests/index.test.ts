@@ -4,7 +4,6 @@ import { bodyElegivel, bodyNaoElegivel } from './json';
 
 describe('Testando rotas do messages', () => {
     it('POST /elegibilidade - Testa um cliente elegivel', async () => {
-        // Retorno: elegivel:true, economiaAnualDeCO2": 462.77
         const response = await supertest(app)
             .post('/elegibilidade')
             .send(bodyElegivel);
@@ -13,7 +12,6 @@ describe('Testando rotas do messages', () => {
         expect(response.body.economiaAnualDeCO2).toEqual(462.77);
     })
     it('POST /elegibilidade - Testa um cliente não elegivel', async () => {
-        // Retorno: elegivel:false, razoesInelegibilidade:"Classe de consumo não atendida","Modalidade tarifária não aceita"
         const response = await supertest(app)
             .post('/elegibilidade')
             .send(bodyNaoElegivel);
