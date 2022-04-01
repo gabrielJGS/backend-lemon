@@ -4,6 +4,7 @@ import { bodyElegivel, bodyNaoElegivel, bodyNaoElegivelModalidade, bodyNaoElegiv
 
 describe('Testando rotas do messages', () => {
     it('POST /elegibilidade - Testa um cliente elegivel', async () => {
+        // Retorno: elegivel:true, economiaAnualDeCO2": 462.77
         const response = await supertest(app)
             .post('/elegibilidade')
             .send(bodyElegivel);

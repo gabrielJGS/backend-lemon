@@ -25,16 +25,9 @@ const bodyNaoElegivel = {
     "classeDeConsumo": "rural",
     "modalidadeTarifaria": "verde",
     "historicoDeConsumo": [
-        3878,
-        9760,
-        5976,
-        2797,
-        2481,
-        5731,
-        7538,
-        4392,
-        7859,
-        4160
+        578,
+        460,
+        376,
     ]
 };
 
