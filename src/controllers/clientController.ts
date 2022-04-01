@@ -28,11 +28,11 @@ const elegibilidade = async (req: Request, res: Response) => {
     const consumoMedioAnual = historicoDeConsumo.reduce((soma: number, valor: number) => soma + valor, 0) / historicoDeConsumo.length;
     // Multipliquei o kwh por 10 para fazer a regra de acordo com os resultados fornecidos
     //- Clientes com tipo de conexão Monofásica só são elegíveis caso tenham consumo médio acima de 400 kWh.
-    if (consumoMedioAnual < 4000 && tipoDeConexao === 'monofasico') razoes.push("Consumo muito baixo para tipo de conexão");
+    if (consumoMedioAnual < 400 && tipoDeConexao === 'monofasico') razoes.push("Consumo muito baixo para tipo de conexão");
     //- Clientes com tipo de conexão Bifásica só são elegíveis caso tenham consumo médio acima de 500 kWh.
-    if (consumoMedioAnual < 5000 && tipoDeConexao === 'bifasico') razoes.push("Consumo muito baixo para tipo de conexão");
+    if (consumoMedioAnual < 500 && tipoDeConexao === 'bifasico') razoes.push("Consumo muito baixo para tipo de conexão");
     //- Clientes com tipo de conexão Trifásica só são elegíveis caso tenham consumo médio acima de 750 kWh.
-    if (consumoMedioAnual < 7500 && tipoDeConexao === 'trifasico') razoes.push("Consumo muito baixo para tipo de conexão");
+    if (consumoMedioAnual < 750 && tipoDeConexao === 'trifasico') razoes.push("Consumo muito baixo para tipo de conexão");
 
     let userOutput;
     if (razoes.length > 0) {
@@ -43,7 +43,10 @@ const elegibilidade = async (req: Request, res: Response) => {
         }
     } else {
         //Para calcular a projeção da **economia anual** de CO2, considere que para serem gerados 1000 kWh no Brasil são emitidos em média 84kg de CO2.
-        const economiaAnual = (consumoMedioAnual * 84) / 1000;
+        // Obter o valor do consumo Anual, e então aplicar a regra de 3
+        const consumoAnual = historicoDeConsumo.reduce((soma: number, valor: number) => soma + valor, 0);
+        const economiaAnual = (consumoAnual * 84) / 1000;
+
         userOutput = {
             elegivel: true,
             economiaAnualDeCO2: economiaAnual
